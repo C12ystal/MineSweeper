@@ -29,8 +29,8 @@ else:
     k = 16
 Normal = Difficulty(40, n, k)
 Hard = Difficulty(99, 16, 30)
-Hell = Difficulty(175, 20, 40)
-Super_Hell = Difficulty(200, 20, 40)
+Hell = Difficulty(170, 21, 37)
+Super_Hell = Difficulty(180, 21, 37)
 
 
 class Mine:
@@ -56,7 +56,7 @@ def ask_diff():
     ans = input("=")
     if ans == "Super Hell":
         Super_Hell.set()
-    elif ans == "C12ystal":
+    elif ans == "Hell":
         Hell.set()
     elif ans == "Hard":
         Hard.set()
