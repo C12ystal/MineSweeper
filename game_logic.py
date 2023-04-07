@@ -2,8 +2,8 @@ import random
 from pygame import mixer
 
 mixer.init()
-max_mines, size_x, size_y, mines, mine, flags, board, field, FlagMode, fbc, fbt, summoned = \
-    0, 0, 0, 0, 0, 0, [], [], False, 'light gray', "⛏", []
+max_mines, size_x, size_y, mines, mine, flags, board, field, FlagMode, fbc, fbt, summoned, activated = \
+    0, 0, 0, 0, 0, 0, [], [], False, 'light gray', "⛏", [], False
 
 
 class Difficulty:
@@ -83,7 +83,9 @@ def board_gen():
 
 def left_click(row, column):
     if 1 <= row <= size_y and 1 <= column <= size_x:
-        if "M" in field[row - 1][column - 1] and "F" not in board[row - 1][column - 1] and not FlagMode:
+        if not activated:
+            dig(row, column)
+        elif "M" in field[row - 1][column - 1] and "F" not in board[row - 1][column - 1] and not FlagMode:
             board[row - 1][column - 1][0] = field[row - 1][column - 1][0]
             for y in range(size_y):
                 for x in range(size_x):
@@ -128,6 +130,8 @@ def dig(row, column):
             board[row - 1][column - 1][0] = field[row - 1][column - 1][0]
         elif board[row - 1][column - 1][0] != ' ':
             board[row - 1][column - 1] = [' ']
+            if not activated:
+                rest_main()
             for a in [1, 0, -1]:
                 for b in [1, 0, -1]:
                     dig(row + a, column + b)
@@ -147,6 +151,15 @@ def mine_place():
     while mines < max_mines:
         mine = Mine(random.randint(0, size_y - 1), random.randint(0, size_x - 1))
         if "0" <= field[mine.row][mine.column][0] <= "7":
+            for a in [-2, -1, 0, 1, 2]:
+                for b in [-2, -1, 0, 1, 2]:
+                    try:
+                        if board[mine.row + a][mine.column + b][0] == ' ':
+                            return mine_place()
+                        else:
+                            pass
+                    except IndexError:
+                        pass
             field[mine.row][mine.column] = ['M']
             for y in [1, 0, -1]:
                 for x in [1, 0, -1]:
@@ -196,6 +209,11 @@ def check_win():
 
 def main():
     ask_diff()
-    field_gen()
-    mine_place()
     board_gen()
+    field_gen()
+
+
+def rest_main():
+    global activated
+    activated = True
+    mine_place()
