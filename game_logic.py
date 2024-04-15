@@ -1,9 +1,10 @@
 import random
+import tkinter
 from pygame import mixer
 
 mixer.init()
 max_mines, size_x, size_y, mines, mine, flags, board, field, FlagMode, fbc, fbt, summoned, activated = \
-    0, 0, 0, 0, 0, 0, [], [], False, 'light gray', "⛏", [], False
+    0, 0, 0, 0, 0, 0, [], [], False, 'light gray', "D", [], False
 
 
 class Difficulty:
@@ -44,11 +45,11 @@ def flag_mode():
     if FlagMode:
         FlagMode = False
         fbc = 'light gray'
-        fbt = "⛏"
+        fbt = "D"
     else:
         FlagMode = True
         fbc = 'red'
-        fbt = "🚩"
+        fbt = "F"
 
 
 def ask_diff():
